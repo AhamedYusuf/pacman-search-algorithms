@@ -296,7 +296,11 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # State = (position, cornersVisited), where cornersVisited is a tuple of
+        # four booleans in the same order as self.corners. Small and hashable;
+        # walls never change, so they are not part of the state.
+        cornersVisited = tuple(corner == self.startingPosition for corner in self.corners)
+        return (self.startingPosition, cornersVisited)
 
     def isGoalState(self, state: Any):
         """
