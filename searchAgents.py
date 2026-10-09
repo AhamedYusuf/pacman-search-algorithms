@@ -332,6 +332,17 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            (x, y), cornersVisited = state
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if self.walls[nextx][nexty]:
+                continue
+
+            # Set the flag of any corner the next position lands on
+            nextPosition = (nextx, nexty)
+            nextCorners = tuple(visited or corner == nextPosition
+                                for corner, visited in zip(self.corners, cornersVisited))
+            successors.append(((nextPosition, nextCorners), action, 1))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
