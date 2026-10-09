@@ -378,6 +378,13 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
+    position, cornersVisited = state
+    unvisited = [corner for corner, visited in zip(corners, cornersVisited) if not visited]
+
+    # All corners visited: this is the goal, so the remaining cost is 0
+    if not unvisited:
+        return 0
+
     return 0 # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
