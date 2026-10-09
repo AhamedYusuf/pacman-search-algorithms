@@ -385,7 +385,9 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     if not unvisited:
         return 0
 
-    return 0 # Default to trivial solution
+    # Pac-Man must at least reach the farthest unvisited corner, and walls can
+    # only make a route longer than its Manhattan distance
+    return max(util.manhattanDistance(position, corner) for corner in unvisited)
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
