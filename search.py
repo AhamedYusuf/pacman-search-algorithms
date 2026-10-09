@@ -117,7 +117,17 @@ def breadthFirstSearch(problem: SearchProblem):
 
     while not fringe.isEmpty():
         state, path = fringe.pop()
-        
+
+        if problem.isGoalState(state):           # goal test on POP
+            return path
+
+        if state not in expanded:
+            expanded.add(state)                  # mark expanded on POP
+            for successor, action, stepCost in problem.getSuccessors(state):
+                fringe.push((successor, path + [action]))
+
+    return []
+
     util.raiseNotDefined()
 
 
