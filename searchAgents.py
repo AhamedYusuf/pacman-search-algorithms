@@ -307,7 +307,9 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # Goal: every one of the four corners has been visited
+        position, cornersVisited = state
+        return all(cornersVisited)
 
     def getSuccessors(self, state: Any):
         """
