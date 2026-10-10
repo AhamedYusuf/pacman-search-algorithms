@@ -296,14 +296,20 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # State = (position, cornersVisited), where cornersVisited is a tuple of
+        # four booleans in the same order as self.corners. Small and hashable;
+        # walls never change, so they are not part of the state.
+        cornersVisited = tuple(corner == self.startingPosition for corner in self.corners)
+        return (self.startingPosition, cornersVisited)
 
     def isGoalState(self, state: Any):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # Goal: every one of the four corners has been visited
+        position, cornersVisited = state
+        return all(cornersVisited)
 
     def getSuccessors(self, state: Any):
         """
@@ -326,6 +332,17 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            (x, y), cornersVisited = state
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if self.walls[nextx][nexty]:
+                continue
+
+            # Set the flag of any corner the next position lands on
+            nextPosition = (nextx, nexty)
+            nextCorners = tuple(visited or corner == nextPosition
+                                for corner, visited in zip(self.corners, cornersVisited))
+            successors.append(((nextPosition, nextCorners), action, 1))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
