@@ -456,7 +456,12 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
     foodPositions = foodGrid.asList()
-    return len(foodPositions)
+    if not foodPositions:
+        return 0
+
+    # At minimum, Pac-Man must travel as far as the most distant remaining dot.
+    return max(abs(position[0] - food[0]) + abs(position[1] - food[1])
+               for food in foodPositions)
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
