@@ -378,7 +378,26 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    position, cornersVisited = state
+    unvisited = [corner for corner, visited in zip(corners, cornersVisited) if not visited]
+
+    # All corners visited: this is the goal, so the remaining cost is 0
+    if not unvisited:
+        return 0
+
+    # Shortest tour from Pac-Man through every unvisited corner, measured with
+    # Manhattan distances. At most 4 corners, so try all orderings (at most 24).
+    # Any real path visits the corners in some order and each leg is at least
+    # its Manhattan distance, so the cheapest ordering never overestimates.
+    from itertools import permutations
+    best = None
+    for order in permutations(unvisited):
+        tourCost = util.manhattanDistance(position, order[0])
+        for i in range(len(order) - 1):
+            tourCost += util.manhattanDistance(order[i], order[i + 1])
+        if best is None or tourCost < best:
+            best = tourCost
+    return best
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
