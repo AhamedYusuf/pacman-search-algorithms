@@ -472,7 +472,24 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    foodPositions = foodGrid.asList()
+    if not foodPositions:
+        return 0
+
+    # Cache symmetric maze distances because the heuristic is evaluated for
+    # many states that reuse the same pairs of positions.
+    distanceCache = problem.heuristicInfo.setdefault('mazeDistances', {})
+    gameState = problem.startingGameState
+
+    def cachedMazeDistance(point1, point2):
+        key = (point1, point2) if point1 <= point2 else (point2, point1)
+        if key not in distanceCache:
+            distanceCache[key] = mazeDistance(point1, point2, gameState)
+        return distanceCache[key]
+
+    # Pac-Man must reach every dot, so reaching the farthest one is a lower
+    # bound on the cost of finishing the problem.
+    return max(cachedMazeDistance(position, food) for food in foodPositions)
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
